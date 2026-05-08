@@ -73,8 +73,17 @@ def main() -> int:
     if not has_changes(cwd):
         return 0
 
+    session_id = payload.get("session_id")
+    footer_note = ""
+    if isinstance(session_id, str) and session_id.strip():
+        footer_note = (
+            f" For commits drafted or made in this session, append "
+            f"`codex resume {session_id.strip()}` as the last body line."
+        )
+
     parts = [
-        "The current Git repository has uncommitted changes. If the user asks for a commit message, use $commit-messager and draft it with the Angular-style template `type(scope): short summary` after inspecting the relevant diffs.",
+        "The current Git repository has uncommitted changes. If the user asks for a commit message, use $commit-messager and draft it with the Angular-style template `type(scope): short summary` after inspecting the relevant diffs."
+        + footer_note,
         section(cwd, "Git Status", ["status", "--short"]),
         section(cwd, "Staged Stat", ["diff", "--cached", "--stat"]),
         section(cwd, "Unstaged Stat", ["diff", "--stat"]),

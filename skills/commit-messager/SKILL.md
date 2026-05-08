@@ -14,10 +14,13 @@ description: "Draft high-quality Angular-style Git commit messages from reposito
    - Check recent style with `git log --oneline -n 8` when the repository has history.
 2. Do not stage, unstage, commit, amend, or reset changes unless the user explicitly asks.
 3. Identify whether changes form one commit or several coherent commits.
-4. Draft message candidates using the Angular-style template `type(scope): short summary`.
-5. Keep the subject line imperative, specific, and under 72 characters when practical.
-6. Add a body only when it clarifies non-obvious intent, behavior changes, migration notes, risk, or testing.
-7. Mention test commands only if they were actually run or are visible in the provided context. Do not invent verification.
+4. Check the target repository root for project-local scope guidance before choosing `scope`. Prefer `GIT_HYGIENE.md`; use `AGENTS.md`, `CLAUDE.md`, `.commit-scopes.md`, `.commit-message.md`, or similar files only as compatibility fallbacks.
+5. Read `references/git_hygiene.md` as the fallback convention for `type`, `scope`, body sections, and footers when the target repository has no local guidance.
+6. Draft message candidates using the Angular-style template `type(scope): short summary`.
+7. Keep the subject line imperative, specific, and under 72 characters when practical.
+8. Add a body only when it clarifies non-obvious intent, behavior changes, migration notes, risk, or testing.
+9. For commits made or drafted in the current Codex session, append a final body line in the form `codex resume <SESSION_ID>` when `SESSION_ID` is available.
+10. Mention test commands only if they were actually run or are visible in the provided context. Do not invent verification.
 
 ## Helper Script
 
@@ -44,28 +47,44 @@ SessionStart = [
 ]
 ```
 
-The hook reads the Codex hook payload from stdin, checks the payload `cwd`, and emits `additionalContext` only when that directory is a Git worktree with uncommitted changes. It injects a compact status summary and a reminder to use `$commit-messager`; it does not stage, commit, amend, or modify files.
+The hook reads the Codex hook payload from stdin, checks the payload `cwd`, and emits `additionalContext` only when that directory is a Git worktree with uncommitted changes. It injects a compact status summary, the `codex resume <SESSION_ID>` footer when `session_id` is present, and a reminder to use `$commit-messager`; it does not stage, commit, amend, or modify files.
 
 ## Output Shape
+
+Use project-local scope guidance as the source of truth when present. Use `references/git_hygiene.md` only as the fallback convention for type, scope, body section, and footer conventions.
 
 For a single commit, provide:
 
 ```text
 type(scope): short summary
 
-<optional body>
+[aim]
+<why this change is needed>
+
+[approach]
+- <implementation choice or changed area>
+- <another implementation point, if needed>
+
+[attention]
+- <risk, migration note, test gap, or reviewer note>
+- <another note, if needed>
+
+codex resume <SESSION_ID>
+Refs: #<ISSUE_ID>
 ```
 
 For multiple possible commits, provide each message under a short heading naming the change group. Include the files or change theme that belong in each commit.
 
 When the user asks for alternatives, give 2-4 candidates with different emphasis rather than tiny wording variations.
 
+- Use `[aim]`, `[approach]`, and `[attention]` only when they add useful context beyond the subject.
+- Write `[approach]` and `[attention]` as bullet lists when there is more than one point. A single point may be one sentence without a bullet.
+- Omit empty sections.
+
 ## Judgment Rules
 
-- Always include both `type` and `scope` in the subject unless the user explicitly asks for another format.
-- Prefer `fix` for bug fixes, `feat` for user-visible capability, `refactor` for behavior-preserving restructuring, `test` for test-only changes, `docs` for documentation-only changes, `chore` for tooling or maintenance, and `style` for formatting-only changes.
-- Choose a short lowercase scope from the changed area, package, feature, command, script, or document group, such as `auth`, `api`, `ui`, `hooks`, `scripts`, `docs`, or `commit-message`.
-- Use `chore(repo)` only when no more specific scope is defensible.
+- If the repository has no project-local scope record, mention that the chosen scope follows the fallback convention and suggest adding one when the user is formalizing commit hygiene.
+- When suggesting a project-local scope record, recommend `GIT_HYGIENE.md` in the repository root.
 - Avoid vague subjects such as `update files`, `fix bug`, `misc changes`, or `refactor code` unless the diff truly gives no more information.
 - Do not include ticket IDs, co-author trailers, breaking-change trailers, or generated-by lines unless the repository already uses them or the user asks.
 - If the diff is too large or ambiguous, state what is unclear and draft the safest message from observable changes.
