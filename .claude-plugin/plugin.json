@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "commit-messager",
+  "description": "Draft Angular-style Git commit messages from repository diffs with project-local scope guidance.",
+  "author": {
+    "name": "Xi SUN",
+    "url": "https://github.com/xisun0"
+  },
+  "repository": "https://github.com/xisun0/commit-messager",
+  "license": "MIT",
+  "keywords": [
+    "git",
+    "commit-message",
+    "skills",
+    "developer-tools"
+  ]
+}

@@ -68,6 +68,15 @@ Use body sections only when they add useful context beyond the subject.
 
 Use bullets in `[approach]` and `[attention]` when there is more than one point. A single point may be one sentence without a bullet. Omit empty sections.
 
+Use `[attention]` for information that affects reviewer judgment:
+
+- known risk or unresolved edge case
+- migration, rollback, or data-boundary note
+- skipped, failed, blocked, or meaningfully limited validation
+- manual follow-up that must not be missed
+
+Do not include routine successful checks just to record execution. For example, omit statements such as "Verified Python syntax" unless the verification result changes how reviewers should assess the commit.
+
 ## Footers
 
 For commits drafted or made in an AI agent session, put the resume footer near the end:

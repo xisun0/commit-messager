@@ -18,9 +18,9 @@ description: "Draft high-quality Angular-style Git commit messages from reposito
 5. Read `references/git_hygiene.md` as the fallback convention for `type`, `scope`, body sections, and footers when the target repository has no local guidance.
 6. Draft message candidates using the Angular-style template `type(scope): short summary`.
 7. Keep the subject line imperative, specific, and under 72 characters when practical.
-8. Add a body only when it clarifies non-obvious intent, behavior changes, migration notes, risk, or testing.
+8. Add a body only when it clarifies non-obvious intent, behavior changes, migration notes, risk, or reviewer-relevant test gaps.
 9. For commits made or drafted in the current Codex session, append a final body line in the form `codex resume <SESSION_ID>` when `SESSION_ID` is available.
-10. Mention test commands only if they were actually run or are visible in the provided context. Do not invent verification.
+10. Do not include routine successful verification in the commit body. Mention testing only when a failure, skipped check, untested path, or limitation affects reviewer judgment.
 
 ## Helper Script
 
@@ -79,6 +79,7 @@ When the user asks for alternatives, give 2-4 candidates with different emphasis
 
 - Use `[aim]`, `[approach]`, and `[attention]` only when they add useful context beyond the subject.
 - Write `[approach]` and `[attention]` as bullet lists when there is more than one point. A single point may be one sentence without a bullet.
+- Use `[attention]` for risks, migration notes, reviewer notes, or meaningful validation gaps. Do not put routine successful checks there.
 - Omit empty sections.
 
 ## Judgment Rules
