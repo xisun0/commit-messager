@@ -83,6 +83,11 @@ SessionStart = [
     { type = "command", command = "/absolute/path/to/commit-messager/skills/commit-messager/scripts/session_start_commit_context.py", async = false, timeoutSec = 5 }
   ] }
 ]
+PreToolUse = [
+  { matcher = "Bash", hooks = [
+    { type = "command", command = "/absolute/path/to/commit-messager/skills/commit-messager/scripts/pre_tool_use_session_context.py", async = false, timeoutSec = 5 }
+  ] }
+]
 ```
 
-The hook only injects context. It does not modify files or run commits.
+The `SessionStart` hook injects context when the session starts or resumes. The `PreToolUse` hook runs before Bash commands but only emits session context when the pending command calls `collect_commit_context.py`. These hooks do not modify files or run commits.
